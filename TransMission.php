@@ -38,6 +38,11 @@ class TransMission extends \SoapClient {
   const DEFAULT_TIMEZONE = 'Europe/Amsterdam';
 
   /**
+   * The regex pattern to check if delOpdracht() was successful.
+   */
+  const RESPONSE_REMOVE_SUCCESS = '/^Opdracht \s+ verwijderd$/';
+
+  /**
    * The login object, used for authentication.
    */
   public $login;
@@ -77,13 +82,13 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Creates a job in TransMission.
+   * Creates a shipping job in TransMission.
    *
    * @param JPResult\TransMission\types\oOpdracht $oOpdracht
    *   The object describing the job to be created in TransMission.
    *
    * @return JPResult\TransMission\types\oTransport
-   *   The transport object.
+   *   The transport object corresponding to the created shipping job.
    */
   public function addOpdracht(oOpdracht $oOpdracht) {
     $arguments = func_get_args();
@@ -91,19 +96,41 @@ class TransMission extends \SoapClient {
     // Prepend the login details to the list of arguments.
     array_unshift($arguments, $this->login);
 
-    return new oTransport((array) $this->soapCall(__FUNCTION__, $arguments));
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return new oTransport((array) $response);
   }
 
   /**
-   * @todo
+   * Removes a job in TransMission.
+   *
+   * @param string $nrzend
+   *   The unique code of the shipping job.
+   *
+   * @return bool
+   *   Returns TRUE if successful, FALSE if unsuccessful.
    */
-  public function delOpdracht(string $nrzend) {
+  public function delOpdracht($nrzend) {
+    $arguments = func_get_args();
+
+    // Prepend the login details to the list of arguments.
+    array_unshift($arguments, $this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return (preg_match(self::RESPONSE_REMOVE_SUCCESS, $response) === 0);
   }
 
   /**
-   * @todo
+   * Returns a PDF file with the list of unsent shipping jobs.
    */
   public function getVerzendlijst() {
+    // The only argument for this SOAP call is the login object.
+    $arguments = array($this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return base64_decode($response);
   }
 
   /**
@@ -139,19 +166,19 @@ class TransMission extends \SoapClient {
   /**
    * @todo
    */
-  public function addVooraanmelding(string $depot, string $verlader, oVooraanmelding $oVooraanmelding) {
+  public function addVooraanmelding($depot, $verlader, oVooraanmelding $oVooraanmelding) {
   }
 
   /**
    * @todo
    */
-  public function getAdresNL(string $postcode) {
+  public function getAdresNL($postcode) {
   }
 
   /**
    * @todo
    */
-  public function getAdresNL_2(string $postcode) {
+  public function getAdresNL_2($postcode) {
   }
 
   /**
@@ -175,7 +202,7 @@ class TransMission extends \SoapClient {
   /**
    * @todo
    */
-  public function getAktueleOpdracht(string $zendingnr, string $nrorder) {
+  public function getAktueleOpdracht($zendingnr, $nrorder) {
   }
 
   /**
@@ -187,12 +214,12 @@ class TransMission extends \SoapClient {
   /**
    * @todo
    */
-  public function vernieuwAktueleOpdrachtRegels(string $opdrachtid, array $aRegels) {
+  public function vernieuwAktueleOpdrachtRegels($opdrachtid, array $aRegels) {
   }
 
   /**
    * @todo
    */
-  public function updatePrintStatus(string $opdrachtid) {
+  public function updatePrintStatus($opdrachtid) {
   }
 }
