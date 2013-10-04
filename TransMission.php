@@ -40,7 +40,7 @@ class TransMission extends \SoapClient {
   /**
    * The regex pattern to check if delOpdracht() was successful.
    */
-  const RESPONSE_REMOVE_SUCCESS = '/^Opdracht \s+ verwijderd$/';
+  const RESPONSE_REMOVE_SUCCESS = '/^Opdracht \w+ verwijderd$/';
 
   /**
    * The login object, used for authentication.
@@ -118,7 +118,7 @@ class TransMission extends \SoapClient {
 
     $response = $this->soapCall(__FUNCTION__, $arguments);
 
-    return (preg_match(self::RESPONSE_REMOVE_SUCCESS, $response) === 0);
+    return (bool) preg_match(self::RESPONSE_REMOVE_SUCCESS, $response);
   }
 
   /**
