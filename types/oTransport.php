@@ -24,15 +24,15 @@ class oTransport extends BaseType {
   public $nrdepaan;
 
   /**
-   * A base64 encoded PDF document to be used to label the shipment.
+   * A base64 encoded PDF file to be used to label the shipment.
    */
   public $labels;
 
   /**
-   * Returns the decoded PDF document used to label the shipment.
+   * Returns the decoded PDF file used to label the shipment.
    *
    * @return string
-   *   The decoded PDF document.
+   *   The decoded PDF file.
    */
   public function getLabels() {
     return base64_decode($this->labels);

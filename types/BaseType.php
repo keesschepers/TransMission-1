@@ -12,7 +12,7 @@ namespace JPResult\TransMission\types;
  */
 abstract class BaseType {
   /**
-   * Creates an instance of the child class.
+   * Create an instance of the child class.
    *
    * This function iterates over the child class' default properties and sets
    * their values based on the parameter passed to the function.

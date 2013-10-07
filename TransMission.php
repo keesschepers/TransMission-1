@@ -12,10 +12,12 @@ include_once 'TransMissionFault.php';
 include_once 'types/oLogin.php';
 include_once 'types/oOpdracht.php';
 include_once 'types/oTransport.php';
+include_once 'types/oDefinitie.php';
 
 use JPResult\TransMission\types\oLogin;
 use JPResult\TransMission\types\oOpdracht;
 use JPResult\TransMission\types\oTransport;
+use JPResult\TransMission\types\oDefinitie;
 
 /**
  * Supplies an API to communicate with TransMission's SOAP service.
@@ -38,9 +40,14 @@ class TransMission extends \SoapClient {
   const DEFAULT_TIMEZONE = 'Europe/Amsterdam';
 
   /**
-   * The regex pattern to check if delOpdracht() was successful.
+   * The regex pattern to check whether delOpdracht() was successful.
    */
   const RESPONSE_REMOVE_SUCCESS = '/^Opdracht \w+ verwijderd$/';
+
+  /**
+   * The regex pattern to check whether sendOpdrachten() was successful.
+   */
+  const RESPONSE_SEND_SUCCESS = '/^Bestand aangemaakt$/';
 
   /**
    * The login object, used for authentication.
@@ -48,7 +55,7 @@ class TransMission extends \SoapClient {
   public $login;
 
   /**
-   * Constructs a TransMission object.
+   * Construct a TransMission object.
    *
    * @param JPResult\TransMission\types\oLogin $login
    *   Supplies the authentication details of the TransMission account.
@@ -82,7 +89,7 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Creates a shipping job in TransMission.
+   * Create a shipping job in TransMission.
    *
    * @param JPResult\TransMission\types\oOpdracht $oOpdracht
    *   The object describing the job to be created in TransMission.
@@ -102,7 +109,7 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Removes a job in TransMission.
+   * Remove a job in TransMission.
    *
    * @param string $nrzend
    *   The unique code of the shipping job.
@@ -122,7 +129,10 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Returns a PDF file with the list of unsent shipping jobs.
+   * Get a PDF file with the list of unsent shipping jobs.
+   *
+   * @return string
+   *   The content of the PDF file.
    */
   public function getVerzendlijst() {
     // The only argument for this SOAP call is the login object.
@@ -134,21 +144,59 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * @todo
+   * Get labels of multiple shipping jobs as a PDF file.
+   *
+   * @param array $aNrzend
+   *   An array of unique codes of shipping jobs.
+   *
+   * @return string
+   *   The content of the PDF file.
    */
-  public function getLabels(ArrayOfString $aNrzend) {
+  public function getLabels(array $aNrzend) {
+    $arguments = func_get_args();
+
+    // Prepend the login details to the list of arguments.
+    array_unshift($arguments, $this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return base64_decode($response);
   }
 
   /**
-   * @todo
+   * Mark current shipping jobs as ready to be sent.
+   *
+   * @return bool
+   *   TRUE when successful, FALSE when there are no unprocessed shipping jobs.
    */
   public function sendOpdrachten() {
+    // The only argument for this SOAP call is the login object.
+    $arguments = array($this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return (bool) preg_match(self::RESPONSE_SEND_SUCCESS, $response);
   }
 
   /**
-   * @todo
+   * Get definitions of a number of parameters in TransMission.
+   *
+   * Gets definitions of the following parameters used in TransMission:
+   *   - Country
+   *   - Shipping type
+   *   - "Plus" service
+   *   - Shipping unit type
+   *
+   * @return JPResult\TransMission\types\oDefinitie
+   *   The object containing the definitions.
    */
   public function getDefinities() {
+    // The only argument for this SOAP call is the login object.
+    $arguments = array($this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return new oDefinitie((array) $response);
   }
 
   /**

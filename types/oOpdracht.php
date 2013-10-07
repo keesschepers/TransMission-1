@@ -142,7 +142,7 @@ class oOpdracht extends BaseType {
   public $aRegel;
 
   /**
-   * Creates a JPResult\TransMission\types\oOpdracht object.
+   * Create a JPResult\TransMission\types\oOpdracht object.
    *
    * Creates an instance of JPResult\TransMission\types\oOpdracht, making sure
    * that "Plus" services and shipping units are instantiated as their
@@ -155,10 +155,10 @@ class oOpdracht extends BaseType {
    *   shipping unit objects, if in the form of arrays, will be converted to the
    *   correct classes.
    *
-   * @return JPResult\TransMission\types\oOpdracht
+   * @todo Date should be created with a unix timestamp.
    */
   function __construct(array $data = array()) {
-    // Convert "Plus" service arrays to Plus objects.
+    // Convert "Plus" services to Plus objects.
     if (isset($data['aPlus'])) {
       foreach ($data['aPlus'] as $index => $Plus) {
         if (!(is_object($Plus) && $Plus instanceof Plus)) {
@@ -167,7 +167,7 @@ class oOpdracht extends BaseType {
       }
     }
 
-    // Convert shipping unit arrays to Regel objects.
+    // Convert shipping units to Regel objects.
     if (isset($data['aRegel'])) {
       foreach ($data['aRegel'] as $index => $Regel) {
         if (!(is_object($Regel) && $Regel instanceof Regel)) {
