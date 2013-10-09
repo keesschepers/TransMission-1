@@ -13,11 +13,15 @@ include_once 'types/oLogin.php';
 include_once 'types/oOpdracht.php';
 include_once 'types/oTransport.php';
 include_once 'types/oDefinitie.php';
+include_once 'types/SoapDate.php';
+include_once 'types/oVooraanmelding.php';
 
 use JPResult\TransMission\types\oLogin;
 use JPResult\TransMission\types\oOpdracht;
 use JPResult\TransMission\types\oTransport;
 use JPResult\TransMission\types\oDefinitie;
+use JPResult\TransMission\types\SoapDate;
+use JPResult\TransMission\types\oVooraanmelding;
 
 /**
  * Supplies an API to communicate with TransMission's SOAP service.
@@ -30,16 +34,6 @@ class TransMission extends \SoapClient {
   const DEFAULT_WSDL = 'https://portal.trans-mission.nl/webservices/TMSOnline.wsdl';
 
   /**
-   * The date format used by TransMission's SOAP service.
-   */
-  const DATE_FORMAT = 'Y-m-d';
-
-  /**
-   * The timezone used by TransMission's SOAP service.
-   */
-  const DEFAULT_TIMEZONE = 'Europe/Amsterdam';
-
-  /**
    * The regex pattern to check whether delOpdracht() was successful.
    */
   const RESPONSE_REMOVE_SUCCESS = '/^Opdracht \w+ verwijderd$/';
@@ -48,6 +42,11 @@ class TransMission extends \SoapClient {
    * The regex pattern to check whether sendOpdrachten() was successful.
    */
   const RESPONSE_SEND_SUCCESS = '/^Bestand aangemaakt$/';
+
+  /**
+   * The regex pattern to check whether addVooraanmelding() was successful.
+   */
+  const RESPONSE_NOTIFY_SUCCESS = '/^Bedankt voor de vooraanmelding$/';
 
   /**
    * The login object, used for authentication.
@@ -200,21 +199,71 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * @todo
+   * Get status of all shipping jobs of a certain date.
+   *
+   * This function does not seem to work, as it returns bogus results.
+   *
+   * @param JPResult\TransMission\types\SoapDate $datum
+   *   The send date of the shipping jobs of which to check the status.
+   *
+   * @return array
+   *   An array containing all matching shipping jobs including their statuses.
+   *
+   * @todo This function seems to be defunct. Deprecated/removed?
    */
-  public function getStatus(date $datum) {
+  public function getStatus(SoapDate $datum) {
+    $arguments = array((string) $datum);
+
+    // Prepend the login details to the list of arguments.
+    array_unshift($arguments, $this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return $response;
   }
 
   /**
-   * @todo
+   * Get ETA of all shipping jobs of a certain date.
+   *
+   * This function does not seem to work, as it returns bogus results.
+   *
+   * @param JPResult\TransMission\types\SoapDate $datum
+   *   The send date of the shipping jobs of which to check the ETA.
+   *
+   * @return array
+   *   An array containing all matching shipping jobs including their ETA's.
+   *
+   * @todo This function seems to be defunct. Deprecated/removed?
    */
-  public function getETA(date $datum) {
+  public function getETA(SoapDate $datum) {
+    $arguments = array((string) $datum);
+
+    // Prepend the login details to the list of arguments.
+    array_unshift($arguments, $this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return $response;
   }
 
   /**
-   * @todo
+   * Notify TransMission up front about shipping jobs.
+   *
+   * @param JPResult\TransMission\types\oVooraanmelding $oVooraanmelding
+   *   The approximate nature and size of the shipment.
+   *
+   * @return bool
+   *   TRUE when successful, FALSE when something went wrong.
    */
-  public function addVooraanmelding($depot, $verlader, oVooraanmelding $oVooraanmelding) {
+  public function addVooraanmelding(oVooraanmelding $oVooraanmelding) {
+    $arguments = func_get_args();
+
+    // Prepend the depot and client details to the list of arguments.
+    array_unshift($arguments, $this->login->depot, $this->login->verlader);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return (bool) preg_match(self::RESPONSE_NOTIFY_SUCCESS, $response);
   }
 
   /**

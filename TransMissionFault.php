@@ -23,6 +23,9 @@ namespace JPResult\TransMission;
  *   longer be removed.
  * - Requested labels do not exist \n
  *   Indicates that no shipping jobs exist with the given unique codes.
+ * - The notification could not be saved \n
+ *   Indicates a problem validating the request, possibly due to incorrect login
+ *   details.
  *
  * @todo Flesh out class documentation.
  */
@@ -62,12 +65,8 @@ class TransMissionFault extends \Exception {
         $message = 'TODO!'; // @todo
         break;
 
-      case 'Onjuist depot':
-        $message = 'TODO!'; // @todo
-        break;
-
-      case 'Er zijn geen ETA tijden bekend':
-        $message = 'TODO!'; // @todo
+      case 'De vooraanmelding kon niet worden opgeslagen':
+        $message = 'The notification could not be saved';
         break;
 
       case 'Geen opdrachten gevonden':
@@ -83,7 +82,7 @@ class TransMissionFault extends \Exception {
         break;
 
       default:
-        $message = 'An unknown error occurred';
+        $message = 'An unknown error occurred'; // @todo Do more parsing here.
     }
 
     parent::__construct($message, $code, $previous);
