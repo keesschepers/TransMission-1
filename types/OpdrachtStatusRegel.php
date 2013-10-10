@@ -15,7 +15,7 @@ include_once 'RegelHistorie.php';
  */
 class OpdrachtStatusRegel extends BaseType {
   /**
-   * 
+   * The ID of the shipping unit.
    */
   public $Nrcollo;
 
