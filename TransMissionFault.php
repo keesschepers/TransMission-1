@@ -26,6 +26,12 @@ namespace JPResult\TransMission;
  * - The notification could not be saved \n
  *   Indicates a problem validating the request, possibly due to incorrect login
  *   details.
+ * - No address found corresponding to this postal code \n
+ *   Indicates that the postal code given can not be found in the database.
+ * - Incorrect postal code, must consist of 4 digits and 2 letters \n
+ *   Indicates that the given postal code is not formatted correctly.
+ * - No shipping jobs found \n
+ *   Indicates that no shipping jobs match the given criteria.
  *
  * @todo Flesh out class documentation.
  */
@@ -38,7 +44,7 @@ class TransMissionFault extends \Exception {
    */
   function __construct(\SoapFault $previous) {
     // Use the same error code as the SoapFault.
-    $code = $previous->faultcode;
+    $code = (int) $previous->faultcode;
 
     switch ($previous->getMessage()) {
       case 'Onjuiste inloggegevens':
@@ -61,28 +67,25 @@ class TransMissionFault extends \Exception {
         $message = 'Requested labels do not exist';
         break;
 
-      case 'Geen openstaande opdrachten':
-        $message = 'TODO!'; // @todo
-        break;
-
       case 'De vooraanmelding kon niet worden opgeslagen':
         $message = 'The notification could not be saved';
         break;
 
       case 'Geen opdrachten gevonden':
-        $message = 'TODO!'; // @todo
+        $message = 'No shipping jobs found';
         break;
 
       case 'Onjuiste postcode (Moet bestaan uit 4 cijfers, 2 letters)':
-        $message = 'TODO!'; // @todo
+        $message = 'Incorrect postal code, must consist of 4 digits and 2 letters';
         break;
 
-      case 'Er is geen adres gevonden op deze postcode':
-        $message = 'TODO!'; // @todo
+      case 'Geen adres gevonden op deze postcode':
+        $message = 'No address found corresponding to this postal code';
         break;
 
       default:
-        $message = 'An unknown error occurred'; // @todo Do more parsing here.
+        // @todo Do more parsing here.
+        $message = 'An unknown error occurred';
     }
 
     parent::__construct($message, $code, $previous);

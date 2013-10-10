@@ -13,6 +13,8 @@ include_once 'Regel.php';
 
 /**
  * Defines the oOpdracht data type used to describe a shipping job.
+ *
+ * @todo Add PHP magic __isset() function.
  */
 class oOpdracht extends BaseType {
   /**

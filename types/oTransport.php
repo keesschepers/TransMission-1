@@ -29,7 +29,7 @@ class oTransport extends BaseType {
   public $labels;
 
   /**
-   * Returns the decoded PDF file used to label the shipment.
+   * Get the decoded PDF file used to label the shipment.
    *
    * @return string
    *   The decoded PDF file.
