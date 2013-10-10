@@ -11,7 +11,7 @@ include_once 'BaseType.php';
 include_once 'oError.php';
 
 /**
- * Defines the oResult data type used for authentication.
+ * Defines the oResult data type used to describe import results.
  */
 class oResult extends BaseType {
   /**
