@@ -20,7 +20,8 @@ class Regel extends BaseType {
 
   /**
    * The type of shipping unit.
-   * @todo Refer to the function that returns available shipping unit types.
+   *
+   * @see JPResult\TransMission\TransMission::getDefinities()
    */
   public $vrzenh;
 

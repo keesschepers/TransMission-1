@@ -15,7 +15,8 @@ include_once 'BaseType.php';
 class Plus extends BaseType {
   /**
    * The code for the type of "Plus" service.
-   * @todo Refer to the function returning the service types.
+   *
+   * @see JPResult\TransMission\TransMission::getDefinities()
    */
   public $kode;
 

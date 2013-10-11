@@ -17,7 +17,8 @@ include_once 'Regel.php';
 class oOpdracht extends BaseType {
   /**
    * The type of shipment.
-   * @todo refer to the function that returns the available shipment types.
+   *
+   * @see JPResult\TransMission\TransMission::getDefinities()
    */
   public $type;
 
@@ -128,9 +129,9 @@ class oOpdracht extends BaseType {
 
   /**
    * (optional) Array of "Plus" service items.
-   * @todo refer to the function that returns the available "Plus" services.
    *
    * @see JPResult\TransMission\types\Plus
+   * @see JPResult\TransMission\TransMission::getDefinities()
    */
   public $aPlus;
 
@@ -154,8 +155,6 @@ class oOpdracht extends BaseType {
    *   the value of the array item by the same name. "Plus" service objects and
    *   shipping unit objects, if in the form of arrays, will be converted to the
    *   correct classes.
-   *
-   * @todo Date should be created with a unix timestamp.
    */
   function __construct(array $data = array()) {
     // Convert "Plus" services to Plus objects.
