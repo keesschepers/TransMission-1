@@ -20,6 +20,7 @@ include_once 'types/Pkgebied.php';
 include_once 'types/OpdrachtStatus.php';
 include_once 'types/oBestand.php';
 include_once 'types/oResult.php';
+include_once 'types/oAktueleOpdracht.php';
 
 use JPResult\TransMission\types\oLogin;
 use JPResult\TransMission\types\oOpdracht;
@@ -29,8 +30,10 @@ use JPResult\TransMission\types\SoapDate;
 use JPResult\TransMission\types\oVooraanmelding;
 use JPResult\TransMission\types\oAdres;
 use JPResult\TransMission\types\Pkgebied;
+use JPResult\TransMission\types\OpdrachtStatus;
 use JPResult\TransMission\types\oBestand;
 use JPResult\TransMission\types\oResult;
+use JPResult\TransMission\types\oAktueleOpdracht;
 
 /**
  * Supplies an API to communicate with TransMission's SOAP service.
@@ -56,6 +59,11 @@ class TransMission extends \SoapClient {
    * The regex pattern to check whether addVooraanmelding() was successful.
    */
   const RESPONSE_NOTIFY_SUCCESS = '/^Bedankt voor de vooraanmelding$/';
+
+  /**
+   * The regex pattern to check whether updatePrintStatus() was successful.
+   */
+  const RESPONSE_PRINTSTATUS_SUCCESS = '/^Printstatus bijgewerkt$/';
 
   /**
    * The login object, used for authentication.
@@ -397,9 +405,20 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * @todo
+   * Get current (unsent) shipping job.
+   *
+   * @param string $zendingnr
+   *   (optional) The unique shipping code. Does not appear to work.
+   * @param string $nrorder
+   *   (optional) Indentifier of the order corresponding to the shipping job.
+   *
+   * @return
+   *   An instance of JPResult\TransMission\types\oOpdracht containing the
+   *   matched shipping job, or FALSE when no match was found.
+   *
+   * @todo Find out what $zendingnr does.
    */
-  public function getAktueleOpdracht($zendingnr, $nrorder) {
+  public function getAktueleOpdracht($zendingnr = '', $nrorder = '') {
     $arguments = func_get_args();
 
     // Prepend the login details to the list of arguments.
@@ -407,24 +426,74 @@ class TransMission extends \SoapClient {
 
     $response = $this->soapCall(__FUNCTION__, $arguments);
 
-    return new oOpdracht((array) $response);
+    return (array) $response ? new oOpdracht((array) $response) : FALSE;
   }
 
   /**
-   * @todo
+   * Get a list of all current (unsent) shipping jobs.
+   *
+   * @return array
+   *   An array of JPResult\TransMission\types\oAktueleOpdracht objects with
+   *   basic information about current shipping jobs.
    */
   public function getAktueleOpdrachtLijst() {
+    // The only argument for this SOAP call is the login object.
+    $arguments = array($this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    // Convert array items to oAktueleOpdracht objects.
+    foreach ($response as $index => $item) {
+      $response[$index] = new oAktueleOpdracht((array) $item);
+    }
+
+    return $response;
   }
 
   /**
-   * @todo
+   * Update a shipping job with new shipping job units.
+   *
+   * @param int $opdrachtid
+   *   The ID of the shipping job.
+   * @param array $aRegels
+   *   An array of JPResult\TransMission\types\Regel objects defining the new
+   *   shipping job units.
+   *
+   * @return
+   *   Some inexplicable text.
+   *
+   * @todo Find out what in the world the return value means.
    */
   public function vernieuwAktueleOpdrachtRegels($opdrachtid, array $aRegels) {
+    $arguments = func_get_args();
+
+    // Prepend the login details to the list of arguments.
+    array_unshift($arguments, $this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return $response;
   }
 
   /**
-   * @todo
+   * Set a shipping job as "printed".
+   *
+   * @param int $opdrachtid
+   *   The ID of the shipping job.
+   *
+   * @return bool
+   *   TRUE when successful, FALSE when failed.
+   *
+   * @todo This function always seems to report success.
    */
   public function updatePrintStatus($opdrachtid) {
+    $arguments = func_get_args();
+
+    // Prepend the login details to the list of arguments.
+    array_unshift($arguments, $this->login);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return (bool) preg_match(self::RESPONSE_PRINTSTATUS_SUCCESS, $response);
   }
 }
