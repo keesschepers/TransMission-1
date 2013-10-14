@@ -17,9 +17,9 @@ class oBestand extends BaseType {
    * The type of import. Must be one of:
    * - "opdracht" => To import shipping jobs.
    * - "OpdrachtRegel" => To import shipping job units.
-   * - "desadv" => Unknown.
+   * - "desadv" => To import jobs using the DESADV standard.
    *
-   * @todo What does "desadv" mean.
+   * @see http://desadv.info/
    */
   public $type;
 

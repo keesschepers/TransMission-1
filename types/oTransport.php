@@ -19,7 +19,7 @@ class oTransport extends BaseType {
   public $zendingnr;
 
   /**
-   * @todo Undocumented, purpose not clear. Perhaps depot-specific?
+   * ID of the depot that will be supplied with the shipment.
    */
   public $nrdepaan;
 

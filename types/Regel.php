@@ -61,8 +61,7 @@ class Regel extends BaseType {
   public $omsverp;
 
   /**
-   * (optional)
-   * @todo Find out what this does.
+   * (optional) Indicates whether a EUR-pallet should be exchanged.
    */
   public $omruilen;
 }

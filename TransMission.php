@@ -216,9 +216,9 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Get status of all shipping jobs of a certain date.
+   * (deprecated) Get status of all shipping jobs of a certain date.
    *
-   * This function does not seem to work, as it returns bogus results.
+   * This function is deprecated in favor of getOpdrachtStatus().
    *
    * @param JPResult\TransMission\types\SoapDate $datum
    *   The send date of the shipping jobs of which to check the status.
@@ -226,7 +226,7 @@ class TransMission extends \SoapClient {
    * @return array
    *   An array containing all matching shipping jobs including their statuses.
    *
-   * @todo This function seems to be defunct. Deprecated/removed?
+   * @see JPResult\TransMission\TransMission::getDefinities()
    */
   public function getStatus(SoapDate $datum) {
     $arguments = array((string) $datum);
@@ -284,7 +284,10 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Get the address corresponding to a Dutch postal code.
+   * (deprecated) Get the address corresponding to a Dutch postal code.
+   *
+   * This function is a deprecated variant of getAdresNL_2(). Use that function
+   * instead of this.
    *
    * @param string $postcode
    *   The Dutch postal code.
@@ -304,18 +307,16 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * (deprecated) Get the address corresponding to a Dutch postal code.
-   *
-   * This function seems to be a deprecated variant of getAdresNL(). Use that
-   * function instead of this.
+   * Get the addresses corresponding to a Dutch postal code.
    *
    * @param string $postcode
    *   The Dutch postal code.
    *
-   * @return JPResult\TransMission\types\oAdres
-   *   The address corresponsing to the postal code.
+   * @return array
+   *   An array of matching addresses. Can occasionally contain more than one
+   *   address.
    *
-   * @todo Find out if this is deprecated.
+   * @see JPResult\TransMission\types\oAdres
    */
   public function getAdresNL_2($postcode) {
     $arguments = func_get_args();
@@ -324,6 +325,11 @@ class TransMission extends \SoapClient {
     array_unshift($arguments, $this->login);
 
     $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    // Convert array items to oAdres objects.
+    foreach ($response as $index => $item) {
+      $response[$index] = new oAdres((array) $item);
+    }
 
     return $response;
   }
@@ -353,8 +359,6 @@ class TransMission extends \SoapClient {
   /**
    * Get the status of shipping jobs.
    *
-   * This function does not work properly. Use getJobStatus() instead.
-   *
    * @param string $datum
    *   (optional) The date of the shipping jobs.
    * @param string $zendingnr
@@ -367,8 +371,7 @@ class TransMission extends \SoapClient {
    *
    * @see JPResult\TransMission\types\OpdrachtStatus
    *
-   * @todo This function should be deprecated and replaced.
-   * @todo Create higher-level function to work around the quirks of this.
+   * @todo This function should be deprecated and replaced or fixed.
    */
   public function getOpdrachtStatus(SoapDate $datum = NULL, $zendingnr = '', $nrorder = '') {
     // Construct the arguments array of the SOAP call.
