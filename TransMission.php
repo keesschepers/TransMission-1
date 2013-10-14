@@ -226,7 +226,7 @@ class TransMission extends \SoapClient {
    * @return array
    *   An array containing all matching shipping jobs including their statuses.
    *
-   * @see JPResult\TransMission\TransMission::getDefinities()
+   * @see JPResult\TransMission\TransMission::getOpdrachtStatus()
    */
   public function getStatus(SoapDate $datum) {
     $arguments = array((string) $datum);
@@ -294,6 +294,8 @@ class TransMission extends \SoapClient {
    *
    * @return JPResult\TransMission\types\oAdres
    *   The address corresponsing to the postal code.
+   *
+   * @see JPResult\TransMission\TransMission::getAdresNL_2()
    */
   public function getAdresNL($postcode) {
     $arguments = func_get_args();
