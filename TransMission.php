@@ -240,9 +240,9 @@ class TransMission extends \SoapClient {
   }
 
   /**
-   * Get ETA of all shipping jobs of a certain date.
+   * (deprecated) Get ETA of all shipping jobs of a certain date.
    *
-   * This function does not seem to work, as it returns bogus results.
+   * This function is deprecated in favor of getOpdrachtStatus().
    *
    * @param JPResult\TransMission\types\SoapDate $datum
    *   The send date of the shipping jobs of which to check the ETA.
@@ -250,7 +250,7 @@ class TransMission extends \SoapClient {
    * @return array
    *   An array containing all matching shipping jobs including their ETA's.
    *
-   * @todo This function seems to be defunct. Deprecated/removed?
+   * @see JPResult\TransMission\TransMission::getOpdrachtStatus()
    */
   public function getETA(SoapDate $datum) {
     $arguments = array((string) $datum);
@@ -361,6 +361,10 @@ class TransMission extends \SoapClient {
   /**
    * Get the status of shipping jobs.
    *
+   * This function returns an array of shipping jobs that match. Use
+   * JPResult\TransMission\TransMission::getJobStatus() if you need to get a
+   * single shipping job by their unique shipping code.
+   *
    * @param string $datum
    *   (optional) The date of the shipping jobs.
    * @param string $zendingnr
@@ -372,8 +376,7 @@ class TransMission extends \SoapClient {
    *   An array of matching shipping jobs and their statuses.
    *
    * @see JPResult\TransMission\types\OpdrachtStatus
-   *
-   * @todo This function should be deprecated and replaced or fixed.
+   * @see JPResult\TransMission\TransMission::getJobStatus()
    */
   public function getOpdrachtStatus(SoapDate $datum = NULL, $zendingnr = '', $nrorder = '') {
     // Construct the arguments array of the SOAP call.
@@ -500,5 +503,42 @@ class TransMission extends \SoapClient {
     $response = $this->soapCall(__FUNCTION__, $arguments);
 
     return (bool) preg_match(self::RESPONSE_PRINTSTATUS_SUCCESS, $response);
+  }
+
+  /**
+   * Get the status of a single shipping job by its unique shipping code.
+   *
+   * @param string $zendingnr
+   *   (optional) The unique code of the shipping job.
+   *
+   * @return
+   *   The shipping jobs and its statuses or FALSE when the shipping job can't
+   *   be found or hasn't been processed yet.
+   *
+   * @see JPResult\TransMission\types\OpdrachtStatus
+   */
+  public function getJobStatus($zendingnr) {
+    // Construct the arguments array of the SOAP call.
+    $arguments = array($this->login, '', $zendingnr, '');
+
+    try {
+      $response = $this->soapCall('getOpdrachtStatus', $arguments);
+    }
+    catch (TransMissionFault $e) {
+      if ($e->getMessage() == 'No shipping jobs found') {
+        return FALSE;
+      }
+      else {
+        throw $e;
+      }
+    }
+
+    // Make sure the result really does match, otherwise return FALSE.
+    if ($response[0]->Zendingnummer == $zendingnr) {
+      return new OpdrachtStatus((array) $response[0]);
+    }
+    else {
+      return FALSE;
+    }
   }
 }
