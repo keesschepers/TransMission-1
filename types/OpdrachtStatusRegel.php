@@ -75,8 +75,18 @@ class OpdrachtStatusRegel extends BaseType {
           $data['aRegelHistorie'][$index] = new RegelHistorie((array) $RegelHistorie);
         }
       }
+
+      // Sort the status mutation objects.
+      usort($data['aRegelHistorie'], 'self::mutationSort');
     }
 
     parent::__construct($data);
+  }
+
+  /**
+   * Callback of usort() to sort status mutations based on date and time.
+   */
+  protected function mutationSort($a, $b) {
+    return strcmp($a->Datum . $a->Tijd, $b->Datum . $b->Tijd);
   }
 }
