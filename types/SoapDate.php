@@ -14,7 +14,7 @@ class SoapDate extends \DateTime {
   /**
    * The date format used by the SOAP protocol.
    */
-  const DATE_FORMAT = 'Y-m-d';
+  const DATE_FORMAT = 'Y-m-d H:m:s';
 
   /**
    * The timezone used by TransMission's SOAP service.
