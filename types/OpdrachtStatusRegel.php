@@ -87,6 +87,14 @@ class OpdrachtStatusRegel extends BaseType {
    * Callback of usort() to sort status mutations based on date and time.
    */
   protected function mutationSort($a, $b) {
+    // Status 0 must be the last one.
+    if ($a->Status == 0) {
+      return 1;
+    }
+    elseif ($b->Status == 0) {
+      return -1;
+    }
+
     return strcmp($a->Datum . $a->Tijd, $b->Datum . $b->Tijd);
   }
 }
