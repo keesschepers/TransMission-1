@@ -368,12 +368,12 @@ class TransMission extends \SoapClient {
   /**
    * Get the status of shipping jobs.
    *
-   * This function returns an array of shipping jobs that match. Use
-   * JPResult\TransMission\TransMission::getJobStatus() if you need to get a
+   * This function returns an array of shipping jobs with statuses that match.
+   * Use JPResult\TransMission\TransMission::getJobStatus() if you need to get a
    * single shipping job by their unique shipping code.
    *
    * @param string $datum
-   *   (optional) The date of the shipping jobs.
+   *   (optional) The minimum date of the shipping job statuses.
    * @param string $zendingnr
    *   (optional) The unique code of the shipping job.
    * @param string $nrorder
@@ -532,7 +532,7 @@ class TransMission extends \SoapClient {
       $response = $this->soapCall('getOpdrachtStatus', $arguments);
     }
     catch (TransMissionFault $e) {
-      if ($e->getMessage() == 'No shipping jobs found') {
+      if ($e->getMessage() == 'No status updates found') {
         return FALSE;
       }
       else {
