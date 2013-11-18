@@ -32,6 +32,8 @@ namespace JPResult\TransMission;
  *   Indicates that the given postal code is not formatted correctly.
  * - No shipping jobs found \n
  *   Indicates that no shipping jobs match the given criteria.
+ * - No status updates found \n
+ *   Indicates that no status updates match the given criteria.
  *
  * @todo Flesh out class documentation.
  */
@@ -81,6 +83,10 @@ class TransMissionFault extends \Exception {
 
       case 'Geen adres gevonden op deze postcode':
         $message = 'No address found corresponding to this postal code';
+        break;
+
+      case 'Geen statussen gevonden':
+        $message = 'No status updates found';
         break;
 
       default:
