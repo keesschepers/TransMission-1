@@ -18,6 +18,7 @@ include_once 'types/oVooraanmelding.php';
 include_once 'types/oAdres.php';
 include_once 'types/Pkgebied.php';
 include_once 'types/OpdrachtStatus.php';
+include_once 'types/oDepot.php';
 include_once 'types/oBestand.php';
 include_once 'types/oResult.php';
 include_once 'types/oAktueleOpdracht.php';
@@ -31,6 +32,7 @@ use JPResult\TransMission\types\oVooraanmelding;
 use JPResult\TransMission\types\oAdres;
 use JPResult\TransMission\types\Pkgebied;
 use JPResult\TransMission\types\OpdrachtStatus;
+use JPResult\TransMission\types\oDepot;
 use JPResult\TransMission\types\oBestand;
 use JPResult\TransMission\types\oResult;
 use JPResult\TransMission\types\oAktueleOpdracht;
@@ -75,10 +77,10 @@ class TransMission extends \SoapClient {
    *
    * @param JPResult\TransMission\types\oLogin $login
    *   Supplies the authentication details of the TransMission account.
-   * @param $wsdl
+   * @param string $wsdl
    *   (optional) Supplies the URL of TransMission's SOAP service. Defaults to
    *   self::DEFAULT_WSDL.
-   * @param $options
+   * @param array $options
    *   (optional) Supplies the options to use for the SoapClient connection.
    *
    * @return JPResult\TransMission\TransMission
@@ -400,9 +402,27 @@ class TransMission extends \SoapClient {
   }
 
   /**
+   * Get information of a depot.
+   *
+   * @param int $oDepot
+   *   The depot ID.
+   *
+   * @return JPResult\TransMission\types\oDepot
+   *   The object with information about the depot.
+   */
+  public function getDepot($oDepot) {
+    // Construct the arguments array of the SOAP call.
+    $arguments = array($this->login, $oDepot);
+
+    $response = $this->soapCall(__FUNCTION__, $arguments);
+
+    return new oDepot((array) $response);
+  }
+
+  /**
    * Import a spreadsheet file.
    *
-   * @param JPResult\TransMission\types\oBestand
+   * @param JPResult\TransMission\types\oBestand $oBestand
    *   The file to be imported.
    *
    * @return JPResult\TransMission\types\oResult
