@@ -7,8 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-
 /**
  * Defines the Regel data type used to describe a shipping unit.
  */

@@ -7,12 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-include_once 'LandDef.php';
-include_once 'ZndSrtDef.php';
-include_once 'PlusDef.php';
-include_once 'VrzenhDef.php';
-
 /**
  * Defines the oDefinitie data type used to describe some definitions.
  *

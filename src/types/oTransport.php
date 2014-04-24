@@ -7,8 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-
 /**
  * Defines the oTransport data type used to identify a remote shipping job.
  */

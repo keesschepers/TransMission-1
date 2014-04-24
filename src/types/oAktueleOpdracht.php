@@ -7,8 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-
 /**
  * Defines the oAktueleOpdracht data type used to describe.
  */

@@ -7,8 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-
 /**
  * Defines the oError data type used for describe file import errors.
  */

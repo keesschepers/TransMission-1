@@ -7,9 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-include_once 'RegelHistorie.php';
-
 /**
  * Defines the OpdrachtStatusRegel data type used to describe job unit statuses.
  */

@@ -7,9 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-include_once 'oError.php';
-
 /**
  * Defines the oResult data type used to describe import results.
  */

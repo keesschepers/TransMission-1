@@ -7,10 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-include_once 'Plus.php';
-include_once 'Regel.php';
-
 /**
  * Defines the oOpdracht data type used to describe a shipping job.
  */

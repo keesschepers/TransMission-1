@@ -1,0 +1,8 @@
+{
+    "name": "JPResult/TransMission",
+    "autoload": {
+        "psr-4" : {
+            "JPResult\\TransMission\\" : ["src/"]
+        }
+    }
+}

@@ -7,21 +7,7 @@
 
 namespace JPResult\TransMission;
 
-include_once 'TransMissionFault.php';
-
-include_once 'types/oLogin.php';
-include_once 'types/oOpdracht.php';
-include_once 'types/oTransport.php';
-include_once 'types/oDefinitie.php';
-include_once 'types/SoapDate.php';
-include_once 'types/oVooraanmelding.php';
-include_once 'types/oAdres.php';
-include_once 'types/Pkgebied.php';
-include_once 'types/OpdrachtStatus.php';
-include_once 'types/oDepot.php';
-include_once 'types/oBestand.php';
-include_once 'types/oResult.php';
-include_once 'types/oAktueleOpdracht.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use JPResult\TransMission\types\oLogin;
 use JPResult\TransMission\types\oOpdracht;

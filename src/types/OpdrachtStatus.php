@@ -7,10 +7,6 @@
 
 namespace JPResult\TransMission\types;
 
-include_once 'BaseType.php';
-include_once 'Handtekening.php';
-include_once 'OpdrachtStatusRegel.php';
-
 /**
  * Defines the OpdrachtStatus data type used to describe shipping job states.
  */
