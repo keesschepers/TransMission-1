@@ -7,8 +7,6 @@
 
 namespace JPResult\TransMission;
 
-require __DIR__ . '/../vendor/autoload.php';
-
 use JPResult\TransMission\types\oLogin;
 use JPResult\TransMission\types\oOpdracht;
 use JPResult\TransMission\types\oTransport;
