@@ -94,7 +94,7 @@ class OpdrachtStatus extends BaseType {
    */
   function getETA() {
     if ($this->Plandatum) {
-      $eta = new SoapDate("{$this->Plandatum} {$this->Plantijdvan}", new DateTimeZone(SoapDate::TIMEZONE));
+      $eta = new SoapDate("{$this->Plandatum} {$this->Plantijdvan}", new \DateTimeZone(SoapDate::TIMEZONE));
       return $eta->modify('+1 hour');
     }
     else {

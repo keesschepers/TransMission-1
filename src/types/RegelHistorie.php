@@ -43,6 +43,6 @@ class RegelHistorie extends BaseType {
    *   The time the status mutation was created.
    */
   function getTime() {
-    return new SoapDate("{$this->Datum} {$this->Tijd}", new DateTimeZone(SoapDate::TIMEZONE));
+    return new SoapDate("{$this->Datum} {$this->Tijd}", new \DateTimeZone(SoapDate::TIMEZONE));
   }
 }
