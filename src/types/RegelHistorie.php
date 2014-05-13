@@ -35,4 +35,14 @@ class RegelHistorie extends BaseType {
    * The description of the status mutation in Dutch.
    */
   public $Omschrijving;
+
+  /**
+   * Get the creation time of the status mutation.
+   *
+   * return JPResult\TransMission\types\SoapDate
+   *   The time the status mutation was created.
+   */
+  function getTime() {
+    return new SoapDate("{$this->Datum} {$this->Tijd}", new DateTimeZone(SoapDate::TIMEZONE));
+  }
 }
