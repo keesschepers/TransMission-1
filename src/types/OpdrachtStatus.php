@@ -81,4 +81,23 @@ class OpdrachtStatus extends BaseType {
 
     parent::__construct($data);
   }
+
+  /**
+   * Get the ETA of the shipping job, if it's already known.
+   *
+   * Returns the expected time of arrival if known. If unknown it returns FALSE.
+   * Note that the actual ETA given by TransMission is a range of 1 hour before
+   * until 1 hour after this time.
+   *
+   * return JPResult\TransMission\types\SoapDate
+   *   The expected time of arrival.
+   */
+  function getETA() {
+    if ($this->Plandatum) {
+      return new SoapDate("{$this->Plandatum} {$this->Plantijdvan}", new DateTimeZone(SoapDate::TIMEZONE));
+    }
+    else {
+      return FALSE;
+    }
+  }
 }
