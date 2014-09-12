@@ -1,5 +1,6 @@
 {
     "name": "jpresult/transmission",
+    "description": "A PHP library to interface with TransMission's SOAP service. TransMission is a cooperation of European transport and distribution companies.",
     "license": "GPL-3.0",
     "autoload": {
         "psr-4" : {
