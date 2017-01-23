@@ -62,4 +62,9 @@ class Regel extends BaseType {
    * (optional) Indicates whether a EUR-pallet should be exchanged.
    */
   public $omruilen;
+
+  /**
+   * An array containing hazardous information.
+   */
+  public $aAdr;
 }
