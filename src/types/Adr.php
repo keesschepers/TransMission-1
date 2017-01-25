@@ -10,6 +10,9 @@ class Adr
     public $UNKlasse;
     public $VerpakkingsGroep;
     public $EtiketHoofdgevaar;
+    public $EtiketNevengevaar1;
+    public $EtiketNevengevaar2;
+    public $EtiketNevengevaar3;
     public $VervoersCategorie;
     public $TunnelCode;
     public $OmschrijvingChemie;
